@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f45b9a">
+<title>30 Dagen Challenge</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#fff4fa,#f5efff);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#3d3140}
+.app{max-width:560px;margin:auto;padding:18px 15px 92px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+h1{font-size:27px;margin:0;background:linear-gradient(90deg,#f24f96,#8d5bd4);-webkit-background-clip:text;color:transparent}
+.sub{color:#8b7b8f;font-size:13px}.card{background:#ffffffdc;border:1px solid #fff;border-radius:22px;padding:17px;margin:12px 0;box-shadow:0 8px 25px #a65c9b12}
+.hero{background:linear-gradient(135deg,#ff78ad,#9b6be1);color:white}.hero h2{margin:0 0 5px;font-size:20px}.hero .num{font-size:44px;font-weight:800}.progress{height:11px;background:#ffffff55;border-radius:20px;overflow:hidden;margin:13px 0}.progress>div{height:100%;background:white;border-radius:20px;width:0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}.stat{background:#ffffff35;border-radius:14px;padding:10px;text-align:center}.stat b{display:block;font-size:18px}.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:12px}.calhead{font-weight:700;font-size:13px;text-align:center;color:#9a879e}.day{aspect-ratio:1;border-radius:50%;border:1px solid #eadfec;background:white;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}.day.done{background:#f45b9a;color:white;border-color:#f45b9a}.day.current{outline:3px solid #b17be4}.day.future{opacity:.4}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.tab{border:0;border-radius:14px;padding:10px 4px;background:#f4edf8;color:#806f84;font-weight:700}.tab.active{background:linear-gradient(90deg,#f45b9a,#9b6be1);color:white}
+.page{display:none}.page.active{display:block}.field label{font-size:12px;color:#88778c;display:block;margin-bottom:5px}.field{margin:10px 0}input{width:100%;border:1px solid #eadfea;border-radius:13px;padding:12px;font-size:16px;background:#fff}.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{padding:12px;border:1px solid #eadfea;border-radius:14px;background:#fff}.check input{width:auto}.btn{width:100%;border:0;border-radius:14px;padding:13px;font-weight:800;background:linear-gradient(90deg,#f45b9a,#9b6be1);color:#fff;margin-top:8px}
+.chart{height:210px;display:flex;align-items:flex-end;gap:6px;padding:15px 4px;border-bottom:1px solid #e7ddea}.barw{flex:1;background:linear-gradient(#f45b9a,#a36be0);border-radius:8px 8px 0 0;min-height:5px}.celebrate{text-align:center;background:linear-gradient(135deg,#fff0f7,#f1e9ff);padding:30px 18px}.cup{font-size:70px}.celebrate h2{font-size:30px;margin:5px 0;background:linear-gradient(90deg,#f24f96,#8d5bd4);-webkit-background-clip:text;color:transparent}.bottom{position:fixed;bottom:0;left:0;right:0;background:#ffffffee;backdrop-filter:blur(12px);padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #eee}.bottom .tabs{max-width:560px;margin:auto}
+.small{font-size:12px;color:#8c7d91}.pink{color:#f24f96}.purple{color:#8d5bd4}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div><h1>30 Dagen Challenge 💗</h1><div class="sub">Kleine stappen • grote trots</div></div><div style="font-size:28px">👑</div></div>
+
+  <section id="home" class="page active">
+    <div class="card hero">
+      <div class="row"><div><h2>Je doet het geweldig!</h2><div>Blijf vandaag gewoon doorgaan.</div></div><div style="font-size:38px">💖</div></div>
+      <div style="margin-top:10px"><span class="num" id="heroDay">1</span> / 30 dagen</div>
+      <div class="progress"><div id="heroProgress"></div></div>
+      <div class="row"><span id="heroDone">0 dagen ingevuld</span><b id="heroStreak">🔥 0 dagen</b></div>
+      <div class="stats"><div class="stat"><span>Start</span><b id="startShow">—</b></div><div class="stat"><span>Nu</span><b id="nowShow">—</b></div><div class="stat"><span>Verschil</span><b id="diffShow">—</b></div></div>
+    </div>
+    <div class="card"><div class="row"><h3 style="margin:0">📅 Kalender</h3><span class="small">Tik op een dag</span></div><div class="grid" id="calendar"></div></div>
+    <div class="card"><h3 style="margin-top:0">🎯 Mijn doel</h3><div class="field"><label>Startgewicht (kg)</label><input id="start" type="number" step=".1" placeholder="bijv. 80"></div><div class="field"><label>Doelgewicht (kg)</label><input id="goal" type="number" step=".1" placeholder="bijv. 72"></div><button class="btn" onclick="saveSettings()">Opslaan 💕</button></div>
+  </section>
+
+  <section id="today" class="page">
+    <div class="card hero"><div class="row"><div><div class="small" style="color:#fff">VANDAAG</div><h2 id="todayTitle">Dag 1</h2></div><div style="font-size:35px">✨</div></div></div>
+    <div class="card">
+      <div class="field"><label>⚖️ Gewicht vandaag (kg)</label><input id="weight" type="number" step=".1"></div>
+      <div class="field"><label>🚶 Stappen</label><input id="steps" type="number"></div>
+      <div class="checks">
+        <label class="check"><input id="water" type="checkbox"> 💧 Water</label>
+        <label class="check"><input id="food" type="checkbox"> 🥗 Gezond</label>
+        <label class="check"><input id="exercise" type="checkbox"> 🏃 Beweging</label>
+        <label class="check"><input id="sleep" type="checkbox"> 😴 Slaap</label>
+      </div>
+      <div class="field"><label>😊 Hoe voel je je?</label><input id="mood" placeholder="bijv. energiek"></div>
+      <div class="field"><label>📝 Notitie</label><input id="note" placeholder="Vandaag ben ik trots op..."></div>
+      <button class="btn" onclick="saveDay()">Dag opslaan 💗</button>
+    </div>
+  </section>
+
+  <section id="stats" class="page">
+    <div class="card"><h3 style="margin-top:0">📈 Mijn gewicht</h3><div class="small">Je ingevulde weegmomenten</div><div class="chart" id="chart"></div></div>
+    <div class="card"><h3 style="margin-top:0">🔥 Streaks</h3><div class="row"><div><div class="small">Huidige streak</div><div style="font-size:30px;font-weight:800" id="streakBig">0</div></div><div style="font-size:50px">🔥</div><div><div class="small">Langste streak</div><div style="font-size:30px;font-weight:800" id="longest">0</div></div></div></div>
+  </section>
+
+  <section id="donePage" class="page">
+    <div class="card celebrate"><div class="cup">🏆</div><h2>30 DAGEN GEHAALD!</h2><p>Wat een topper! Je hebt 30 dagen volgehouden. Daar mag je trots op zijn. 🎉</p><div class="stats" style="background:white;border-radius:16px;padding:8px"><div class="stat"><span>Start</span><b id="finalStart">—</b></div><div class="stat"><span>Eind</span><b id="finalEnd">—</b></div><div class="stat"><span>Verschil</span><b id="finalDiff">—</b></div></div><button class="btn" onclick="show('home')">Mijn reis bekijken 💕</button></div>
+  </section>
+</div>
+
+<div class="bottom"><div class="tabs"><button class="tab active" id="tHome" onclick="show('home')">🏠<br>Overzicht</button><button class="tab" id="tToday" onclick="show('today')">📅<br>Vandaag</button><button class="tab" id="tStats" onclick="show('stats')">📈<br>Statistieken</button><button class="tab" id="tDone" onclick="show('donePage')">🏆<br>Resultaat</button></div></div>
+
+<script>
+const KEY='challenge30_pretty_v2';
+let d=JSON.parse(localStorage.getItem(KEY)||'{"start":"","goal":"","days":{},"day":1}');
+let day=Number(d.day)||1;
+const $=x=>document.getElementById(x);
+function saveAll(){localStorage.setItem(KEY,JSON.stringify(d))}
+function filled(i){let x=d.days[i];return x && (x.weight||x.steps||x.water||x.food||x.exercise||x.sleep||x.mood||x.note)}
+function countDone(){return Array.from({length:30},(_,i)=>filled(i+1)).filter(Boolean).length}
+function streak(){let s=0;for(let i=1;i<=30;i++){if(filled(i))s++;else break}return s}
+function update(){
+ $('start').value=d.start||'';$('goal').value=d.goal||'';
+ let done=countDone(), pct=Math.round(done/30*100), s=streak();
+ $('heroDay').textContent=day;$('heroProgress').style.width=pct+'%';$('heroDone').textContent=done+' dagen ingevuld';$('heroStreak').textContent='🔥 '+s+' dagen';
+ $('startShow').textContent=d.start?d.start+' kg':'—';
+ let ws=Array.from({length:30},(_,i)=>parseFloat(d.days[i+1]?.weight)).filter(Number.isFinite);
+ let last=ws.length?ws[ws.length-1]:NaN; $('nowShow').textContent=Number.isFinite(last)?last+' kg':'—';
+ let diff=Number.isFinite(last)&&Number(d.start)?last-Number(d.start):NaN;$('diffShow').textContent=Number.isFinite(diff)?(diff>0?'+':'')+diff.toFixed(1)+' kg':'—';
+ $('streakBig').textContent=s;$('longest').textContent=s;
+ $('finalStart').textContent=d.start?d.start+' kg':'—';$('finalEnd').textContent=Number.isFinite(last)?last+' kg':'—';$('finalDiff').textContent=Number.isFinite(diff)?(diff>0?'+':'')+diff.toFixed(1)+' kg':'—';
+ renderCalendar();renderChart();loadDay();
+ if(done>=30) document.getElementById('tDone').style.display='block';
+}
+function renderCalendar(){
+ let c=$('calendar');c.innerHTML='';
+ ['M','D','W','D','V','Z','Z'].forEach(x=>{let e=document.createElement('div');e.className='calhead';e.textContent=x;c.appendChild(e)});
+ for(let i=1;i<=30;i++){let e=document.createElement('button');e.className='day '+(filled(i)?'done ':'')+(i===day?'current ':'');e.textContent=i;e.onclick=()=>{day=i;d.day=i;saveAll();show('today')};c.appendChild(e)}
+}
+function renderChart(){
+ let c=$('chart');c.innerHTML='';let vals=Array.from({length:30},(_,i)=>parseFloat(d.days[i+1]?.weight)).filter(Number.isFinite);if(!vals.length){c.innerHTML='<div class="small" style="margin:auto">Vul je gewicht in om je grafiek te zien 💕</div>';return}
+ let min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
+ vals.forEach(v=>{let b=document.createElement('div');b.className='barw';b.style.height=(20+(max-v)/range*160)+'px';c.appendChild(b)})
+}
+function loadDay(){let x=d.days[day]||{};$('todayTitle').textContent='Dag '+day;$('weight').value=x.weight||'';$('steps').value=x.steps||'';$('water').checked=!!x.water;$('food').checked=!!x.food;$('exercise').checked=!!x.exercise;$('sleep').checked=!!x.sleep;$('mood').value=x.mood||'';$('note').value=x.note||''}
+function saveSettings(){d.start=$('start').value;d.goal=$('goal').value;saveAll();update();alert('Opgeslagen 💗')}
+function saveDay(){d.days[day]={weight:$('weight').value,steps:$('steps').value,water:$('water').checked,food:$('food').checked,exercise:$('exercise').checked,sleep:$('sleep').checked,mood:$('mood').value,note:$('note').value};saveAll();update();show('home')}
+function show(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));let map={home:'tHome',today:'tToday',stats:'tStats',donePage:'tDone'};$(map[id]).classList.add('active');if(id==='donePage'&&countDone()<30)alert('Vul eerst je 30 dagen in 💕');}
+update();
+</script>
+</body>
+</html>
